@@ -6,8 +6,6 @@ import logging as l
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-GGLJSONAUTH = ''
-
 
 def dict_to_spreadsheet_format(data, include_header=False):
     '''
@@ -55,13 +53,15 @@ def datetime_to_string(dt_obj):
     return dt_obj
 
 
-def import_to_gsheets(workbook, spreadsheet, data, ggluser=None):
+def import_to_gsheets(workbook, spreadsheet, data, api_json, share_spreadsheet=None):
     """
     Create Google Sheets workbook > new/open spreadsheet > Clear old data, if exists > enter data.
 
     :param workbook: String of Google Sheets' Workbook name and location. i.e. "Workbook_name"
     :param spreadsheet: String of Spreadsheet name to enter data.
     :param data: Nested lists within list (data for Spreadsheet). i.e. [ [ 'Cell A1', 'Cell A2', ... ], [ 'Cell B1', 'Cell B2', ... ] ]
+    :param share_spreadsheet: Gmail address of account this spreadsheet is shared to.
+    :param api_json: Full file path to Google's API json key file.
     :return: 0: successful; 1: successful.
     Data is also entered into defined Google Sheet.
 
@@ -70,7 +70,7 @@ def import_to_gsheets(workbook, spreadsheet, data, ggluser=None):
     l.info("Authorizing Google User")
 
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(GGLJSONAUTH, scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(api_json, scope)
     g = gspread.authorize(creds)
     l.info("Opening Workbook {0}".format(workbook))
     try:
@@ -79,33 +79,35 @@ def import_to_gsheets(workbook, spreadsheet, data, ggluser=None):
     except gspread.exceptions.SpreadsheetNotFound:
         sh = g.create(workbook)
 
-    if ggluser != None:
-        l.info("Sharing document to {0}".format(ggluser))
-        sh.share(ggluser, perm_type='user', role='owner')
+    if share_spreadsheet != None:
+        l.info("Sharing document to {0}".format(share_spreadsheet))
+        sh.share(share_spreadsheet, perm_type='user', role='owner')
 
     if data.__len__() > 0:
-        try:
-            l.info("Opening Spreadsheet {0}".format(spreadsheet))
-            sp_sheet = sh.worksheet(spreadsheet)
-            sp_sheet.clear()
-            sp_sheet.resize(data.__len__(), cols=max(data[0], key=len).__len__())
-
-        except Exception as e:
-            l.error(str(e))
-            l.info("{0} does not exist. Creating Spreadsheet {0}".format(spreadsheet))
-            sh.add_worksheet(spreadsheet, rows=data.__len__(), cols=max(data[0], key=len).__len__())
-            sp_sheet = sh.worksheet(spreadsheet)
 
         try:
             data = balance_rows(data)
+
+            try:
+                l.info("Opening Spreadsheet {0}".format(spreadsheet))
+                sp_sheet = sh.worksheet(spreadsheet)
+                sp_sheet.clear()
+                sp_sheet.resize(data.__len__(), cols=max(data, key=len).__len__())
+
+            except Exception as e:
+                l.error(str(e))
+                l.info("{0} does not exist. Creating Spreadsheet {0}".format(spreadsheet))
+                sh.add_worksheet(spreadsheet, rows=data.__len__(), cols=max(data, key=len).__len__())
+                sp_sheet = sh.worksheet(spreadsheet)
+
             l.info("Add lines to Google Sheets")
-            outpt = sp_sheet.range(1, 1, data.__len__(), max(data[0], key=len).__len__())
+            outpt = sp_sheet.range(1, 1, data.__len__(), max(data, key=len).__len__())
+
             x = -1
-            for i in data:
-                for d in i:
+            for r in data:
+                for c in r:
                     x += 1
-                    outpt[x].value = d
-            return outpt
+                    outpt[x].value = c.__str__()
 
             sp_sheet.update_cells(cell_list=outpt)
             return 0

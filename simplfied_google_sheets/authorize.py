@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# import argparse
+import argparse
 import logging
 from os import makedirs
 from os.path import dirname, exists, join
