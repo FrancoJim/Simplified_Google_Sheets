@@ -72,11 +72,6 @@ Output:
 [['key3', 'key1', 'key2'], ['Value 3', 'Value 1', 'Value 2'], ['Value 6', 'Value 4', 'Value 5']]
 ```
 
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Built With
 
 * [burnash/gspread](https://github.com/burnash/gspread) - Google Spreadsheets Python API
@@ -84,10 +79,6 @@ Add additional notes about how to deploy this on a live system
 ## Contributing
 
 * [@FrancoJim](https://github.com/FrancoJim) (Kevin Lang)
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
