@@ -58,14 +58,14 @@ Output:
 This method assumes that dictionary keys are consistent within initial list.
 
 ```
-from simplfied_google_sheets.sheets import *
+import simplfied_google_sheets.sheets import as gs
 
 sample_data =   [
                 {'key1': 'Value 1', 'key2': 'Value 2', 'key3': 'Value 3', },
                 {'key1': 'Value 4', 'key2': 'Value 5', 'key3': 'Value 6', },
                 ]
 
-spreadsheet_cell_ready = dict_to_spreadsheet_format(sample_data, include_header=True)
+spreadsheet_cell_ready = gs.dict_to_spreadsheet_format(sample_data, include_header=True)
 
 print(spreadsheet_cell_ready)
 
