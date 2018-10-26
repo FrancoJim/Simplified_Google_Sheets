@@ -30,7 +30,7 @@ sample_data =   [
                 ["Row 1", "Row 1", "Row 1",],
                 ["Row 2", "Row 2", "Row 2",],
                 ["Row 3", "Row 3", "Row 3",],
-                            ]
+                ]
 
 gs.import_to_gsheets(workbook="Sample Workbook", spreadsheet="List of Rows", data=sample_data, api_json=GGLJSONAUTH, share_spreadsheet="user@gmail.com")
 ```
@@ -44,7 +44,7 @@ sample_data =   [
                 ["Row 1", "Row 1", "Row 1", "Row 1", "Row 1", ],
                 ["Row 2", "Row 2", "Row 2", "Row 2", "Row 2", "Row 2", "Row 2", "Row 2", ],
                 ["Row 3", "Row 3", ],
-                            ]
+                ]
 
 spreadsheet_cell_ready = gs.balance_rows(sample_data)
 
@@ -62,7 +62,7 @@ from simplfied_google_sheets.sheets import *
 sample_data =   [
                 {'key1': 'Value 1', 'key2': 'Value 2', 'key3': 'Value 3', },
                 {'key1': 'Value 4', 'key2': 'Value 5', 'key3': 'Value 6', },
-                            ]
+                ]
 
 spreadsheet_cell_ready = dict_to_spreadsheet_format(sample_data, include_header=True)
 
