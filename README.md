@@ -55,6 +55,7 @@ Output:
 ```
 
 #### Convert Dictionary to list of nested lists (Spreadsheet Format)
+This method assumes that dictionary keys are consistent within initial list.
 
 ```
 from simplfied_google_sheets.sheets import *
